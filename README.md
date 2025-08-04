@@ -31,32 +31,29 @@ Welcome to the AI‑First Software Development Workshop — a hands-on, real-wor
 ### Prerequisites
 SQLite is usually pre-installed on macOS. If you need to install it, see the official instructions: https://www.sqlite.org/download.html
 
-### Database Setup
-Before running the app for the first time, initialize the database and create the required table:
-
-```console
-$ cd apps/flask-todo && python init_db.py
-```
-
-
 1. **Clone the Repo**
    ```bash
    git clone https://github.com/bencoz/ai_first_workshop.git
    cd ai_first_workshop
    ```
 
-1. **Create a Virtual Environment**
+2. **Create a Virtual Environment**
    ```bash
    python3 -m venv venv
    source venv/bin/activate
    ```
 
-2. **Install Dependencies**
+3. **Install Dependencies**
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Run the App**
+5. **Init the DB**
+   ```bash
+   cd apps/flask-todo && python init_db.py
+   ```
+
+6. **Run the App**
    ```bash
    cd apps/flask-todo && flask run
    ```

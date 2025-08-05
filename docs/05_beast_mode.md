@@ -15,7 +15,7 @@ Beast Mode is:
 
 ## 🧪 Activity 1: Use an Aggressive Prompt
 
-Create a file: `copilot/prompts/beast_mode_add_feature.prompt.md`
+Create a file: `.github/prompts/beast_mode_add_feature.prompt.md`
 
 ```yaml
 ---

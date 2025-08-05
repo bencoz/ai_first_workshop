@@ -8,7 +8,7 @@ In this session, you'll practice using AI to explore and document a **new codeba
 
 We’ll use [patrickloeber/flask-todo](https://github.com/patrickloeber/flask-todo), a simple Flask app that lets users add and complete tasks.
 
-You'll clone it into the `app/` folder of your workshop repo.
+You'll clone it into the `apps/flask-todo/` folder of your workshop repo.
 
 ---
 

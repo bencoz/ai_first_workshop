@@ -69,7 +69,7 @@ Pick from the list below or create your own.
 
 ## 🛠️ Step 2: Use Prompts
 
-Use `copilot/prompts/create_task.prompt.md` or create your own with:
+Use `copilot-examples/prompts/create_task.prompt.md` or create your own with:
 
 ```yaml
 ---

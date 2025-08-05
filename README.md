@@ -39,7 +39,7 @@ SQLite is usually pre-installed on macOS. If you need to install it, see the off
 
 2. **Create a Virtual Environment**
    ```bash
-   python3 -m venv venv
+   python3 -m venv .venv
    source venv/bin/activate
    ```
 
@@ -48,9 +48,14 @@ SQLite is usually pre-installed on macOS. If you need to install it, see the off
    pip install -r requirements.txt
    ```
 
-3. **Init the DB**
+4. **Create the DB**
    ```bash
-   cd apps/flask-todo && python init_db.py
+   sqlite3 apps/flask-todo/instance/db.sqlite
+   ```
+
+5. **Init the DB**
+   ```bash
+   python apps/flask-todo/init_db.py
    ```
 
 6. **Run the App**

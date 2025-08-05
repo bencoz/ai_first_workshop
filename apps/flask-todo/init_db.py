@@ -1,6 +1,10 @@
+import os
 import sqlite3
+from dotenv import load_dotenv
 
-DB_PATH = "instance/db.sqlite"
+load_dotenv()  # load environment variables from .env
+
+DB_PATH = os.getenv("DB_PATH", "db.sqlite")
 
 CREATE_TABLE_SQL = """
 CREATE TABLE IF NOT EXISTS todo (

@@ -1,45 +1,33 @@
-Simple Flask Todo App using SQLAlchemy and SQLite database.
+# Simple Flask Todo App using SQLAlchemy and SQLite database.
 
 For styling [semantic-ui](https://semantic-ui.com/) is used.
 
 ### Setup
-Create project with virtual environment
+- Create and activate a virtual environment in project root:
+  ```console
+  python3 -m venv venv
+  source venv/bin/activate
+  ```
 
-```console
-$ mkdir myproject
-$ cd myproject
-$ python3 -m venv venv
-```
+- Install all dependencies:
+  ```console
+  pip install -r requirements.txt
+  ```
 
-Activate it
-```console
-$ . venv/bin/activate
-```
+- Copy environment template and configure:
+  ```console
+  cp .env.example .env
+  ```
 
-or on Windows
-```console
-venv\Scripts\activate
-```
+- Initialize the database:
+  ```console
+  cd apps/flask-todo
+  python init_db.py
+  ```
 
-Install Flask
-```console
-$ pip install Flask
-$ pip install Flask-SQLAlchemy
-```
+- Run the app:
+  ```console
+  flask run
+  ```
 
-Set environment variables in terminal
-```console
-$ export FLASK_APP=app.py
-$ export FLASK_ENV=development
-```
-
-or on Windows
-```console
-$ set FLASK_APP=app.py
-$ set FLASK_ENV=development
-```
-
-Run the app
-```console
-$ flask run
-```
+This app automatically loads configuration from `.env` via `python-dotenv`. Ensure `.env` exists in the project root.

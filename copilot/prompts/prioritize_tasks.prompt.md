@@ -1,6 +1,6 @@
 ---
 mode: agent
-model: gpt-4o
+model: GPT-4.1
 tools: ['codebase']
 description: 'Add task priority (1–5) and display in the list.'
 ---

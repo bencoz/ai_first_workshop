@@ -1,6 +1,6 @@
 ---
 mode: agent
-model: gpt-4o
+model: GPT-4.1
 tools: ['codebase']
 description: 'Add filtering by due date or priority via query params.'
 ---

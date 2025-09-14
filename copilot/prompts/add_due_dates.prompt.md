@@ -1,6 +1,6 @@
 ---
 mode: agent
-model: gpt-4o
+model: GPT-4.1
 tools: ['codebase']
 description: 'Add due dates to tasks with minimal, reviewable diffs.'
 ---

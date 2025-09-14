@@ -1,6 +1,6 @@
 ---
 mode: agent
-model: gpt-4o
+model: GPT-4.1
 tools: ['codebase']
 description: 'Add task tags (create, display, and filter by tag) with small, reviewable diffs.'
 ---

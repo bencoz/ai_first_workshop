@@ -62,25 +62,25 @@ Benefits of customizing Copilot:
 
 Use these artifacts together to steer behavior. Naming and availability can vary by release channel; the patterns below map to how this workshop organizes them.
 
-- `copilot-instruction` (Custom Instructions):
-  - Scope: Global (you), Workspace (this repo), and sometimes Session (this chat).
-  - Where: Set via the “Copilot: Customize” UI in VS Code.
+- `copilot-instructions.md` (Custom Instructions):
+  - Scope: Global (you), Workspace (this repo), referenced in every prompt.
   - Purpose: Stable, always‑on behavior (persona, coding style, test policy, file layout).
+  - Example: Use the LevelUP MCP prompt to generate a custom made instructions file for your codebase.
 
-- `*.instructions` (Repository instruction files):
+- `*.instructions.md` (Repository instruction files):
   - Scope: Checked‑in guidance for a folder/repo (team conventions, stack details).
-  - Where: Keep near code, e.g., `docs/project.instructions.md` or `.github/copilot-instructions.md`.
+  - Where: Keep near code, e.g., `.github/instructions/testing.instructions.md` or `.github/instructions/typescript.instructions.md`.
   - Purpose: Shareable rules that travel with the code. Useful for onboarding and ensuring consistency.
   - Example front‑matter scoping:
     ```markdown
     ---
-    applyTo: "app/**/*.py"   # optional glob/language scope if supported
+    applyTo: "app/**/**.ts"   # optional glob/language scope if supported
     ---
     # Service Instructions
-    Use FastAPI + Pydantic; handlers thin, services thick; tests in `tests/`.
+    Use Expo; Functional components; test files sit next to component file.
     ```
 
-- `*.prompt` (Prompt templates / task files):
+- `*.prompt.md` (Prompt templates / task files):
   - Scope: One task or goal to run via Chat/Agent Mode.
   - Where: e.g., `.github/prompts/add-healthcheck.prompt.md`.
   - Purpose: Encapsulate a repeatable change or workflow with clear acceptance criteria.
@@ -88,15 +88,16 @@ Use these artifacts together to steer behavior. Naming and availability can vary
     ```markdown
     ---
     mode: agent
-    description: Add `/healthz` endpoint with test using existing FastAPI layout.
+    description: Add `/health` endpoint with test using existing FastAPI layout.
     ---
     ```
 
-Rule of thumb: Instructions define “how we work,” Prompts define “what to do next.”
+Rule of thumb: Instructions define “how we work,” Prompts define “what to do next (tasks).”
 
-Chat modes (how you run the prompt):
-- Chat (default): conversational Q&A, summaries, code reviews. Good for “think aloud,” plans, and explanations.
+AI modes (how you run the prompt):
 - Inline chat/suggestions: quick code‑adjacent edits or completions in the editor.
+- Ask (default): conversational Q&A, summaries, code reviews. Good for “think aloud,” plans, and explanations.
+- Edit: perfect when you know what you want to do but don’t necessarily want to write it all out yourself
 - Agent Mode: executes a plan and applies file changes with your approval. Best after you’ve prepared a good plan and context.
 
 ---
@@ -105,11 +106,11 @@ Chat modes (how you run the prompt):
 
 Goal: Optimize for prompt‑first, small diffs, fast feedback.
 
-Where: VS Code → Settings, or `settings.json`.
+Where: VS Code → Glboal Settings, or `.vscode/settings.json`.
 
 Recommended keys (defaults in parentheses):
 - `chat.agent.enabled` — enable Agent Mode (default: false; VS Code 1.99+).
-- `chat.agent.maxRequests` — cap Agent Mode requests (default: 5 free, 15 others).
+- `chat.agent.maxRequests` — cap Agent Mode requests (recommened 100).
 - `github.copilot.chat.agent.runTasks` — allow running workspace tasks (default: true).
 - `chat.mcp.discovery.enabled` — discover MCP servers from other tools (default: true).
 - `github.copilot.chat.agent.autoFix` — auto‑diagnose/fix generated changes (default: true).
@@ -127,8 +128,6 @@ Example `settings.json` snippet:
 }
 ```
 
-Tip: If a key isn’t recognized in your build, set it via the Settings UI or omit it.
-
 ---
 
 ## 🚀 Quickstart: Add Custom Instructions
@@ -136,7 +135,7 @@ Tip: If a key isn’t recognized in your build, set it via the Settings UI or om
 Make it personal. Tell Copilot who you are and how you like to work.
 
 How:
-- Open Copilot Chat → gear icon → “Customize” → Global.
+- Open Copilot Chat → gear icon → “Instructions” → “New Instructions File” → “User Data Folder“ → Enter name like “personal“.
 - Paste 6–10 lines max describing your style and preferences.
 - Start a fresh chat and ask: “Summarize the instructions you’ll follow for me.”
 
@@ -155,41 +154,46 @@ Call out assumptions and safer alternatives.
 Use workspace‑scoped instructions to encode architecture, conventions, and “how we do it here.”
 
 Steps (VS Code):
-1) Open “Customize” again and switch to the Workspace tab/scope.
-2) Add rules tied to the current repo (these apply only in this workspace).
-3) Save, then ask: “Given our workspace instructions, how should you implement a new endpoint?”
-
-Copy‑paste starter (Workspace):
-```
-Project context:
-- Python 3.11, FastAPI, SQLAlchemy, Alembic migrations, Pytest.
-- Use Pydantic models. DB access via repository pattern.
-
-Conventions:
-- Place API routes in `app/api/*.py`. Business logic in `app/services/*`.
-- Prefer dependency‑injected services. No direct DB calls in route handlers.
-- Tests live under `tests/`. Use fixtures; no external network in unit tests.
-
-Security & quality:
-- Validate all external inputs with Pydantic. Avoid eval/exec and unsafe shell.
-- Include a test with every new endpoint. Document with OpenAPI annotations.
-```
-
-Ideas for other stacks:
-- Frontend (React/Next): file layout, CSS strategy, UI library, testing (Vitest/RTL).
-- DevOps: IaC tool, naming, environments, CIDR ranges, review requirements.
-- Docs: voice/tone, structure (TL;DR → how‑to → reference), link policies.
+How:
+- Open a project you currently working on.
+- Install the LevelUP MCP (in case you haven't already) 
+- Open Copilot Chat → write '/' → choose "Generate-Copilot-Instructions"
+- Review the generated isntructions and fill missing infomration 
 
 ---
 
 ## 📚 Knowledge: Attach Docs and Specs
 
-Knowledge grounds Copilot in your project materials so answers cite your sources.
+### Adding Knowledge as Context in Copilot Chat
 
-Steps (VS Code):
-1) In “Customize”, open the Knowledge section.
-2) Add key files/folders (e.g., `README.md`, `docs/`, `openapi.yaml`, `ARCHITECTURE.md`).
-3) In chat, reference them: “Using the attached OpenAPI, generate a typed client.”
+Attach just enough project material (docs, specs, key source files) so answers cite and align with your real code—not generic defaults.
+Core idea: You are curating the smallest set of files/symbols that make your request unambiguous.
+
+Ways to add context:
+
+1. Hash mentions
+  - Type `#` in the chat box.
+  - Pick: a file, folder, symbol, or `#codebase` (entire repo – use sparingly).
+  - Example: “Refactor this using #apps/flask-todo/app.py and follow #docs/architecture.md.”
+
+2. Drag & drop
+  - Drag files or folders from Explorer, Search results, or an open editor tab into the chat.
+  - Great for 2–5 related files (e.g., model + route + test).
+
+3. Add Context button
+  - Click “Add Context” → choose “Files & Folders” or “Symbols.”
+  - Symbols work well for narrowing to a single function/class in a large file.
+
+4. Layer incrementally
+  - Start minimal; only add broader folders or `#codebase` if the model lacks needed links.
+  - Remove stale or unrelated attachments before asking a new question.
+
+Good practice checklist:
+- Prefer the smallest set of authoritative sources (spec > README > random code).
+- Pair implementation + its test when asking for changes.
+- Call out which attached file is “source of truth” if overlaps exist.
+- After a response, ask: “List the files you used” to sanity‑check grounding.
+
 
 Good candidates:
 - `docs/` and `README.md` for project overview and vocabulary.
@@ -204,22 +208,21 @@ Tips:
 
  
 
-## 🛠️ Chat Agent Mode (Plan → Context → Edits)
+## 🛠️ Full Agent Mode Example (Plan → Context → Edits)
 
 Agent Mode is most effective when you fill the context before any code is generated.
 
 Plan‑first checklist:
 - State the goal and acceptance criteria (inputs, outputs, tests, UX/API shape).
-- Restate constraints from your Global/Workspace Instructions (frameworks, layout, style).
 - Cite attached Knowledge (filenames/anchors) the plan should follow.
 - Identify affected files and propose a minimal change set.
 - Include a test plan and rollback strategy.
 
 Example “context pack” prompt:
 ```
-Before proposing code, draft a plan to add `/healthz`.
+Before proposing code, draft a plan to add `/health`.
 Include: acceptance criteria, which files to change/create (with paths),
-how it fits our workspace rules, a minimal diff outline, and a pytest.
+how it fits our workspace rules, a minimal diff outline, and a test.
 Confirm the plan with me. Only then show diffs for step 1.
 ```
 
@@ -227,15 +230,11 @@ Confirm the plan with me. Only then show diffs for step 1.
 
 ## 🧩 MCP (Model Context Protocol) — Where It Fits
 
-- What it is: A standard for exposing tools and data sources (filesystems, databases, HTTP APIs) to AI agents through a common protocol.
+- What it is: A standard for exposing tools and data sources to AI agents through a common protocol.
 - Why it matters: It’s another form of context engineering—bringing the right tools and knowledge to the model in a structured way.
-- Copilot today: Copilot Agent Mode has built‑in capabilities (edit files, search code, run plans) and can leverage artifacts/Knowledge you attach. MCP support depends on your extension stack; some VS Code extensions provide MCP clients/servers you can run alongside Copilot. If MCP isn’t available in your setup, use Knowledge + clear Instructions as a practical alternative.
+- Copilot today: Copilot Agent Mode has built‑in capabilities (edit files, search code, run plans) and can leverage artifacts/Knowledge you attach.
 - Safe workflow: Prefer read‑only tools first; require review for write/apply actions; keep changes small and testable.
-
-Example MCP‑style mental model (even without MCP):
-- Treat Knowledge as a read tool (RAG).
-- Treat prompts as plans with explicit acceptance criteria.
-- Treat Agent Mode as a controlled write tool gated by your review.
+- LevelUP MCP: Exposes tools to inject context to GitHub Copilot like work items, pull request comments, pipeline data and more: [LevelUP MCP SharePoint](https://att.sharepoint.com/sites/LevelUP_GenAI/SitePages/GitHub-Copilot-MCP.aspx)
 
 ## 🧰 Tips, Pitfalls, and Review Loop
 

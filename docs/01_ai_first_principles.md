@@ -122,7 +122,6 @@ Adoption ladder (pick 2–3 for the next month):
 ## 📚 Further Reading
 
 - AIFSD (concepts and practices): https://github.com/tembo/aifsd
-- AI‑First Software Development Manifesto: https://www.tembo.io/blog/ai-first-software-development-manifesto
 - Practical evals for LLM features: search for “LLM eval harness” and “golden tests”.
 
 ---

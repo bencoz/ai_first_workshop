@@ -60,16 +60,13 @@ Open http://127.0.0.1:5000 and add/complete a task to confirm it works.
 
 ## 🧪 Exercise 1: Explore With AI (7m)
 
-Open the app folder in your editor and start a chat with your AI assistant (e.g., Copilot Chat). Use these prompts and verify answers in code:
+Open the app folder in your editor and start a chat with your AI assistant (e.g., Copilot Chat). 
+In ask mode use these prompts and verify answers in code:
 
 Prompts:
-
 1) “Give a high-level overview: entrypoint, main modules, data model, routes, and templates. Cite file paths and line numbers.”
-
 2) “List all Flask routes with their handler functions and associated templates. Include file:line citations.”
-
 3) “Explain the request flow when a user creates a task: which route, function, validation, data store, and redirect path?”
-
 4) “Point out any implicit requirements: env vars, secrets, DB files, or Flask configuration.”
 
 As you receive answers, open the cited files and lines to confirm accuracy. If something seems off, ask the AI to correct itself with updated citations.
@@ -78,7 +75,7 @@ As you receive answers, open the cited files and lines to confirm accuracy. If s
 
 ## ✍️ Exercise 2: Create Onboarding Docs (12m)
 
-Produce three small, high-signal docs inside the app. Keep each to 1–2 screens.
+In agent mode produce three small, high-signal docs inside the app. Keep each to 1–2 screens.
 
 - `app/docs/quickstart.md` — Setup/run instructions and common pitfalls
 - `app/docs/architecture.md` — Components, data model, and request flow
@@ -91,76 +88,6 @@ Recommended prompts:
 - “Draft a Quickstart for running this repo locally based only on files present here. Include prerequisites and copy-paste commands.”
 - “Create an architecture overview describing modules, data model, and request flow with file references.”
 - “Generate a routes table with route, function, template, and 1-line notes. Verify by reading decorators in code.”
-
----
-
-## 🧱 Deliverable Templates
-
-Use these as starting points and tune to the code you see.
-
-`app/docs/quickstart.md`
-
-```md
-# Quickstart
-
-## Prerequisites
-- Python 3.10+
-- Virtualenv (recommended)
-
-## Setup
-python -m venv .venv
-source .venv/bin/activate        # Windows: .\\.venv\\Scripts\\Activate.ps1
-pip install -r requirements.txt   # or: pip install flask
-
-## Run
-export FLASK_APP=app.py && flask run  # Windows: $env:FLASK_APP="app.py"; flask run
-# or: python app.py
-
-## Troubleshooting
-- If Flask cannot find the app, check FLASK_APP and working directory.
-- If a SQLite file is used, ensure the process can write to the folder.
-```
-
-`app/docs/architecture.md`
-
-```md
-# Architecture
-
-## Components
-- Entry point: <file>
-- Routes/handlers: <file(s)>
-- Templates: <folder>
-- Data storage: <file/tech>
-
-## Data Model
-- Task: { id, title, completed }
-
-## Request Flow
-```mermaid
-flowchart TD
-A[Browser] -->|GET /| B[index()] --> C[render index.html]
-A -->|POST /add| D[add()] --> E[store new task] --> F[redirect /]
-A -->|POST /complete| G[complete(id)] --> H[update task] --> F
-```
-
-## Key Dependencies
-- Flask
-- (Optional) SQLite / SQLAlchemy / Jinja2 templates
-```
-
-`app/docs/routes.md`
-
-```md
-# Routes
-
-| Route | Function | Template | Notes |
-|---|---|---|---|
-| / | index | index.html | Lists tasks |
-| /add | add | add.html | Creates task, then redirects |
-| /complete | complete | – | Marks complete, then redirects |
-
-> Source: verify with @app.route decorators in code.
-```
 
 ---
 

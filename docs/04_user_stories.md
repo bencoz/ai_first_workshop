@@ -83,42 +83,13 @@ Acceptance Criteria:
 
 ## 🗺️ Step 2: Draft a Plan (with AI)
 
-Open Copilot Chat and paste this planning prompt; then adjust specifics from your code:
-
-```
-You are helping me implement a small user story in a Flask Todo app.
-
-Goal: Implement <pick one story>.
-
-Please propose a minimal plan with:
-- Acceptance criteria restated in bullet points
-- Affected files and exact changes (paths + brief diffs)
-- Any data model change (where it lives today)
-- Form/template updates (file names)
-- A quick manual test checklist and (optional) a tiny pytest
-- A rollback plan if we revert
-
-Confirm the plan first. After I approve, show diffs for step 1 only.
-Keep diffs small and runnable between steps.
-```
+Open Copilot Chat and use the 'new task.prompt.md' to start working with Copilot on the user story; then adjust specifics from your code.
 
 Tip: Ask the model to cite file paths exactly as they exist.
 
 ---
 
-## 🛠️ Step 3: Use Prompt Files (Agent Mode)
-
-Use one of these prompt files as a starting point (edit the acceptance criteria inside):
-
-- `copilot/prompts/add_due_dates.prompt.md`
-- `copilot/prompts/prioritize_tasks.prompt.md`
-- `copilot/prompts/filter_tasks.prompt.md`
-
-Each file includes front‑matter for Agent Mode plus a short brief. In Chat, say: “Run the add_due_dates prompt and show the plan only.” Approve step‑by‑step diffs.
-
----
-
-## 🔬 Step 4: Verify and Tidy
+## 🔬 Step 3: Verify and Tidy
 
 - Run the app and manually test against each acceptance criterion
 - If you added a quick test, run it (or write a tiny smoke test now)

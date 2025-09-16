@@ -1,0 +1,11 @@
+# Ruff configuration
+line-length = 100
+select = ["E", "F", "I", "B", "UP", "SIM", "C4"]
+ignore = [
+  # Allow print statements in educational context / CLI commands
+  "T201",
+]
+
+[format]
+quote-style = "double"
+indent-style = "space"

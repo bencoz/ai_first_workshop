@@ -78,3 +78,73 @@ Start with the agenda, then follow each module:
 Prompts for Modules 4–5 live in `copilot/prompts/`.
 
 See the full agenda at `docs/00_agenda.md`.
+
+## 🏗️ Flask App Architecture Update
+
+The bundled to‑do app now uses an application factory pattern for better testability and environment separation.
+
+Key points:
+- `create_app()` in `apps/flask-todo/app.py` builds the app instance.
+- Configuration classes live in `apps/flask-todo/config.py` (`DevConfig`, `TestConfig`, `ProdConfig`).
+- CSRF protection (Flask‑WTF) is enabled; mutation actions use POST forms with tokens.
+- A custom `404.html` template has been added.
+
+Run with Flask CLI (preferred):
+```bash
+cd apps/flask-todo
+export FLASK_APP=app.py
+flask run
+```
+
+Or directly (dev convenience):
+```bash
+python apps/flask-todo/app.py
+```
+
+## ✅ Testing
+
+Pytest is configured with an in‑memory SQLite DB. Sample tests live in `apps/flask-todo/tests/`.
+
+Run all tests:
+```bash
+pytest -q
+```
+
+## 🧹 Linting & Formatting
+
+Tools added:
+- Ruff (`ruff.toml`) for linting & import sorting
+- Black for formatting
+
+Run lint:
+```bash
+ruff check .
+```
+
+Format code:
+```bash
+black .
+```
+
+Auto‑fix lint (where safe):
+```bash
+ruff check --fix .
+```
+
+## 🛠️ Environment Variables
+
+Copy `.env.example` to `.env` and set at least `SECRET_KEY` before deploying or sharing.
+
+```bash
+cp .env.example .env
+echo 'SECRET_KEY=$(python -c "import secrets; print(secrets.token_hex(32))")' >> .env
+```
+
+## 🚧 Future Enhancements (Suggested Exercises)
+
+- Add user authentication
+- Introduce migrations (Flask‑Migrate / Alembic)
+- Add pagination & filtering
+- Implement REST or JSON API endpoints
+
+These are intentionally left out for workshop focus—great stretch goals.

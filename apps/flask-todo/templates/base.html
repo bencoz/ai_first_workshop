@@ -14,7 +14,21 @@
     <div style="margin-top: 50px;" class="ui container">
         <h1 class="ui center aligned header">To Do App</h1>
 
+        {# Flash messages ---------------------------------------------------- #}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="ui info message">
+            <ul class="list">
+                {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        {% endwith %}
+
         <form class="ui form" action="/add" method="post">
+            {{ csrf_token() }}
             <div class="field">
                 <label>Todo Title</label>
                 <input type="text" name="title" placeholder="Enter Todo..."><br>
@@ -34,8 +48,16 @@
             <span class="ui green label">Completed</span>
             {% endif %}
 
-            <a class="ui blue button" href="/update/{{ todo.id }}">Update</a>
-            <a class="ui red button" href="/delete/{{ todo.id }}">Delete</a>
+            <div class="ui mini buttons">
+                <form action="/update/{{ todo.id }}" method="post" style="display:inline;">
+                    {{ csrf_token() }}
+                    <button class="ui blue button" type="submit">Toggle</button>
+                </form>
+                <form action="/delete/{{ todo.id }}" method="post" style="display:inline; margin-left:4px;">
+                    {{ csrf_token() }}
+                    <button class="ui red button" type="submit">Delete</button>
+                </form>
+            </div>
         </div>
         {% endfor %}
     </div>

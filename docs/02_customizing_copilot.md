@@ -39,16 +39,12 @@ This 45‑minute, demo‑driven module shows how to shape Copilot’s behavior i
 
 English is the new hottest programming language: most of what we “code” now begins as intent stated in natural language. Customization turns that intent into consistent, repeatable context for the model.
 
+Context Engineering is the delicate art and science of filling the context window with just the right information for the next step. 
+It plays a critical role in enabling AI-assisted development by ensuring that LLMs are contextually aware and fully supported throughout the software development lifecycle. 
+
 Everything is context engineering:
-- Context sources: prompt, attached Knowledge, repo files, and chat history.
-- Techniques: prompt patterns, retrieval (RAG), memory/state, and structured outputs.
-- Goal: make the right context cheap and automatic so suggestions match your stack, tests, and conventions.
 
 Benefits of customizing Copilot:
-- Aligns suggestions with your stack, frameworks, and coding standards.
-- Reduces rework by steering toward your test patterns and file layout.
-- Grounds answers in your docs/specs when attached as Knowledge.
-- Improves consistency across teammates with shared workspace instructions.
 
 <p align="center">
   <img src="assets/context-engineering.jpg" alt="Everything is Context Engineering — Venn of Prompt Engineering, RAG, Memory, and State/History within Context Engineering; Structured Outputs overlapping" width="720" />
@@ -56,7 +52,13 @@ Benefits of customizing Copilot:
 
 <div align="center"><em>Everything is Context Engineering</em></div>
 
----
+## 📦 AI Default modes:
+
+AI modes (how you run the prompt):
+- Inline chat/suggestions: quick code‑adjacent edits or completions in the editor.
+- Ask (default): conversational Q&A, summaries, code reviews. Good for “think aloud,” plans, and explanations.
+- Edit: perfect when you know what you want to do but don’t necessarily want to write it all out yourself
+- Agent Mode: executes a plan and applies file changes with your approval. Best after you’ve prepared a good plan and context.
 
 ## 📦 Artifacts: `copilot-instruction` vs `*.instructions` vs `*.prompt` + Chat Modes
 
@@ -92,14 +94,35 @@ Use these artifacts together to steer behavior. Naming and availability can vary
     ---
     ```
 
-Rule of thumb: Instructions define “how we work,” Prompts define “what to do next (tasks).”
+- `*.chatmode.md` Custom Chat modes
+  - Scope: Tailored chat experience,
+  - Where: e.g/, `.github/chatmodes/planning.prompt.md`
+  - Purpose: Instructions and tools that are applied when you switch to that mode
+  - Example: 
+    ```markdown
+    ---
+    description: Generate an implementation plan for new features or refactoring existing code.
+    model: model: GPT-4.1 (copilot)
+    tools: ['codebase', 'fetch', 'findTestFiles', 'githubRepo', 'search', 'usages']
+    ---
+    Planning mode instructions
+    ```
 
-AI modes (how you run the prompt):
-- Inline chat/suggestions: quick code‑adjacent edits or completions in the editor.
-- Ask (default): conversational Q&A, summaries, code reviews. Good for “think aloud,” plans, and explanations.
-- Edit: perfect when you know what you want to do but don’t necessarily want to write it all out yourself
-- Agent Mode: executes a plan and applies file changes with your approval. Best after you’ve prepared a good plan and context.
+---
 
+## Awesome GitHub Copilot
+
+[github/awesome-copilot](https://github.com/github/awesome-copilot) is a community-driven repository that provides a comprehensive toolkit for customizing and enhancing GitHub Copilot. It features:
+
+- **Prompts:** Task-specific prompts for code generation, documentation, and problem-solving.
+- **Instructions:** Coding standards and best practices that apply contextually to files and projects.
+- **Chat Modes:** Specialized AI personas for different roles (e.g., architect, DBA, security expert).
+- **Collections:** Curated sets of prompts, instructions, and chat modes organized by theme or workflow.
+
+The repository also offers an MCP Server for easy integration with editors like VS Code, enabling users to search and install customizations directly. Contributions are welcome, and the project is licensed under MIT.
+
+**Why use it?**  
+It boosts productivity, enforces best practices, and provides expert-level guidance for Copilot users. Explore the [prompts](https://github.com/github/awesome-copilot/blob/main/README.prompts.md), [instructions](https://github.com/github/awesome-copilot/blob/main/README.instructions.md), and [chat modes](https://github.com/github/awesome-copilot/blob/main/README.chatmodes.md) to get started.
 ---
 
 ## ⚙️ VS Code Settings for AIFSD (AI‑First Software Development)
@@ -120,13 +143,17 @@ Example `settings.json` snippet:
 ```json
 {
   "chat.agent.enabled": true,
-  "chat.agent.maxRequests": 10,
+  "chat.agent.maxRequests": 100,
   "github.copilot.chat.agent.runTasks": true,
   "chat.mcp.discovery.enabled": true,
   "github.copilot.chat.agent.autoFix": true,
   "chat.tools.autoApprove": false
 }
 ```
+> For the latest and most detailed settings, see the official VS Code Copilot settings reference:  
+> [VS Code — Copilot settings reference](https://code.visualstudio.com/docs/copilot/reference/copilot-settings)
+
+**Note:** These settings and their default values change frequently; documentation can become outdated quickly. Always verify against the official reference before applying configuration changes.
 
 ---
 
@@ -236,6 +263,8 @@ Confirm the plan with me. Only then show diffs for step 1.
 - Safe workflow: Prefer read‑only tools first; require review for write/apply actions; keep changes small and testable.
 - LevelUP MCP: Exposes tools to inject context to GitHub Copilot like work items, pull request comments, pipeline data and more: [LevelUP MCP SharePoint](https://att.sharepoint.com/sites/LevelUP_GenAI/SitePages/GitHub-Copilot-MCP.aspx)
 
+
+
 ## 🧰 Tips, Pitfalls, and Review Loop
 
 - Keep instructions short and unambiguous. Remove rules you don’t enforce.
@@ -243,7 +272,7 @@ Confirm the plan with me. Only then show diffs for step 1.
 - Avoid conflicting rules (e.g., framework A vs. B). If needed, create separate workspaces.
 - Periodically prune Knowledge and update it after major refactors.
 - If behavior seems off: restart chat, recheck scopes, simplify instructions, or temporarily disable Global rules to isolate.
-
+- Don't stop running static analyzers and deterministic scans: AI suggestions are helpful but not a replacement for linters, formatters, SAST/SCA, or supply‑chain and license checks (e.g., SonarQube, Veracode, Dependabot/SCA tools). Continue to enforce CI gates that run lint/format, unit tests, SAST, and SCA; treat AI as an assistant that helps fix issues, not as the final security or quality authority. Automate failures (block merges) for critical scan results and include scan outcomes in your review checklist.
 ---
 
 ## ✅ Wrap‑Up Checklist
